@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If this software helps your research, cite this version and the scientific methods and dependencies you used."
+type: software
+title: "FrostLens: an experiment detective for cascade refrigeration"
+version: 0.1.0
+date-released: '2026-10-09'
+authors:
+  - name: FrostLens contributors
+license: MIT
+abstract: "A local workbench for competing parameter explanations, local identifiability diagnostics and sequential experiment selection in an NH3/CO2 cascade refrigeration model."
+keywords:
+  - refrigeration
+  - identifiability
+  - experimental design

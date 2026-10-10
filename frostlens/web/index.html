@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f6f7f3">
+  <meta name="description" content="FrostLens：从制冷实验中的相似解释，找到值得做的下一次实验。开源、本地运行的研究工具。">
+  <title>FrostLens · 让下一次实验更有答案</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="demo-data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳转到分析结果</a>
+<aside class="sidebar" aria-label="实验工作区">
+  <a class="brand" href="#main" aria-label="FrostLens 首页">
+    <svg viewBox="0 0 36 40" aria-hidden="true"><path d="M18 2 33 11v18l-15 9L3 29V11Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3 11 15 9 15-9M18 20v18M10 15v10l8 5 8-5V15M18 2v9" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <span>FrostLens<span class="brand-sub">看见实验的另一种可能</span></span>
+  </a>
+  <div class="workspace-label"><span class="small-dot"></span> 本地研究工作台 <span class="version">v0.1</span></div>
+  <nav class="steps" aria-label="分析步骤">
+    <a href="#data" class="step-link active"><span class="step-number">01</span><span>读懂数据<small>看看实验告诉了我们什么</small></span><span class="step-arrow">↗</span></a>
+    <a href="#explanations" class="step-link"><span class="step-number">02</span><span>发现分歧<small>好拟合，是否只有一个解释？</small></span><span class="step-arrow">↗</span></a>
+    <a href="#experiments" class="step-link"><span class="step-number">03</span><span>选择下一步<small>把测量用在更有价值的地方</small></span><span class="step-arrow">↗</span></a>
+  </nav>
+  <form id="analysis-form" class="controls">
+    <div class="section-eyebrow">实验设置 <span class="eyebrow-rule"></span></div>
+    <label for="case-select">开始一个示例</label>
+    <select id="case-select" data-server-control><option value="narrow">载入示例…</option></select>
+    <p id="case-description" class="field-help">使用合成数据探索：相似的功率曲线，可能来自不同参数。</p>
+    <label for="sensor-select">可用的测量</label>
+    <select id="sensor-select" data-server-control>
+      <option value="power">总输入功率</option>
+      <option value="split">总功率 + 低温级功率</option>
+    </select>
+    <p class="field-help">多一个测量通道，能否减少不确定性？</p>
+    <div class="range-label"><label for="budget-input">推荐实验数</label><output for="budget-input" id="budget-value">3</output></div>
+    <input id="budget-input" type="range" min="1" max="5" step="1" value="3" data-server-control>
+    <details class="bounds-panel"><summary>设备允许工况 <span>可选</span></summary><p>在模型支持范围内填写设备允许值。留空使用默认示例范围；上下限相同可固定变量。</p><div class="bounds-head"><span>变量</span><span>最小值</span><span>最大值</span></div><div class="bounds-row"><label for="te-min" title="模型范围：−52 至 −20 °C">蒸发 °C</label><input id="te-min" type="number" step="any" min="-52" max="-20" placeholder="-48" data-server-control aria-label="最低蒸发温度"><input id="te-max" type="number" step="any" min="-52" max="-20" placeholder="-28" data-server-control aria-label="最高蒸发温度"></div><div class="bounds-row"><label for="tc-min" title="模型范围：15 至 50 °C">冷凝 °C</label><input id="tc-min" type="number" step="any" min="15" max="50" placeholder="24" data-server-control aria-label="最低冷凝温度"><input id="tc-max" type="number" step="any" min="15" max="50" placeholder="44" data-server-control aria-label="最高冷凝温度"></div><div class="bounds-row"><label for="tm-min" title="模型范围：−18 至 5 °C">CO₂ 凝结 °C</label><input id="tm-min" type="number" step="any" min="-18" max="5" placeholder="-15" data-server-control aria-label="最低CO₂凝结温度"><input id="tm-max" type="number" step="any" min="-18" max="5" placeholder="2" data-server-control aria-label="最高CO₂凝结温度"></div><div class="bounds-row"><label for="load-min" title="模型范围：0.5 至 16 kW">制冷 kW</label><input id="load-min" type="number" step="any" min="0.5" max="16" placeholder="4" data-server-control aria-label="最小制冷量"><input id="load-max" type="number" step="any" min="0.5" max="16" placeholder="14" data-server-control aria-label="最大制冷量"></div></details>
+    <button type="submit" id="analyze-button" class="button primary" data-server-control><span class="button-icon">↗</span><span>分析这个示例</span></button>
+    <p id="settings-note" class="settings-note" role="status" hidden>设置已调整；点击分析更新结果与推荐。</p>
+    <button type="button" id="reset-button" class="text-button" data-server-control>重置为原始示例</button>
+  </form>
+  <div class="import-card">
+    <div class="import-symbol" aria-hidden="true">↥</div><strong>让你自己的数据说话</strong>
+    <p>导入实验 CSV，在本机完成分析。</p>
+    <button class="button secondary" id="open-import" data-server-control>导入我的数据 <span>＋</span></button>
+    <button class="text-button" id="sample-button">下载 CSV 模板 ↗</button>
+  </div>
+  <div class="sidebar-bottom"><span class="small-dot"></span> 数据在本机处理 <button id="about-button" aria-haspopup="dialog">方法与边界 <span>↗</span></button></div>
+</aside>
+<main id="main" tabindex="-1">
+  <header class="topbar"><div class="breadcrumb">实验室 <span>/</span> <strong>双级制冷 · 参数辨识</strong></div><div class="top-actions"><button id="export-csv" class="icon-button" disabled title="导出当前测量 CSV">数据 CSV <span>↓</span></button><button id="export-json" class="icon-button" disabled title="导出完整分析结果 JSON">报告 JSON <span>↓</span></button></div></header>
+  <div class="main-content">
+    <div id="offline-banner" class="notice offline-notice" hidden><strong>离线预览</strong><span>可切换、查看与导出预先计算的示例；启动 FrostLens 本地服务后即可分析、导入和模拟实验。</span></div>
+    <div id="error-banner" class="notice error-notice" role="alert" hidden><span id="error-message"></span><button id="dismiss-error" aria-label="关闭错误提示">×</button></div>
+    <section class="hero" aria-labelledby="page-title">
+      <div><div class="eyebrow"><span class="small-dot"></span> OPEN SCIENCE, BETTER EXPERIMENTS</div><h1 id="page-title">让下一次实验，<em>更有答案。</em></h1><p>从一组制冷测量出发，发现同样合理的解释，再找到能区分它们的实验。</p></div>
+      <div class="hero-stamp" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="27"/><path d="M50 0v100M0 50h100M15 15l70 70M15 85l70-70"/><circle cx="50" cy="50" r="7" class="stamp-center"/></svg><span>MAKE UNCERTAINTY USEFUL</span></div>
+    </section>
+    <div class="result-heading"><div class="report-label"><span id="provenance-badge" class="badge">准备就绪</span><span id="dataset-name">正在连接本地实验室</span></div><span id="report-date" class="report-date"></span></div>
+    <section id="summary-strip" class="summary-strip" aria-label="分析摘要">
+      <div class="summary-item"><span>测量点</span><strong id="stat-n">—</strong><small>当前数据集</small></div>
+      <div class="summary-item"><span>拟合误差 <abbr title="均方根误差，越小表示当前功率数据的拟合越接近。小误差不代表参数唯一。">RMSE</abbr></span><strong id="stat-rmse">—</strong><small>越小，当前数据拟合越接近</small></div>
+      <div class="summary-item"><span>测量可约束的方向</span><strong id="stat-rank">—</strong><small>有效方向数 · 归一化奇异值 ≥ 1</small></div>
+      <div class="summary-item status-item"><span>这组数据的提示</span><strong id="stat-status">等待分析</strong><small id="stat-message">先从左侧选择一个示例。</small></div>
+    </section>
+    <div id="busy-indicator" class="busy-indicator" role="status" aria-live="polite" hidden><span class="spinner"></span><div><strong id="busy-title">正在读懂这组数据</strong><span>拟合参数、检查相似解释，并计算值得测量的工况。</span></div></div>
+    <div id="results" aria-busy="false">
+      <section id="data" class="workflow-section" aria-labelledby="data-title">
+        <div class="section-heading"><div><span class="section-index">01 / 数据</span><h2 id="data-title">从你的系统开始</h2></div><p>让每一个数字，都回到它的物理位置。</p></div>
+        <div class="data-grid">
+          <article class="card cycle-card"><div class="card-heading"><div><h3>双级制冷，一条能量路径</h3><p>CO₂ 低温级 / NH₃ 高温级 · 稳态研究模型</p></div><span class="micro-badge">物理模型</span></div><div id="cycle-diagram" class="cycle-diagram"><p class="empty-note">分析后显示实际测量工况</p></div><div class="cycle-footer"><label for="row-input">查看测量 <strong id="row-number">—</strong></label><input id="row-input" type="range" min="0" max="0" value="0" disabled aria-label="选择查看的测量点"><span id="cycle-power">—</span></div></article>
+          <article class="card fit-card"><div class="card-heading"><div><h3>拟合贴合，意味着解释唯一吗？</h3><p>每个点对应一次功率测量</p></div><span class="chart-unit">kW</span></div><div id="fit-chart" class="fit-chart"><p class="empty-note">分析后显示功率曲线</p></div><div class="chart-legend"><span><i class="legend-dot measured"></i>测量</span><span><i class="legend-line"></i>解释 A</span><span id="alternative-legend"><i class="legend-line alternative"></i>解释 B</span></div></article>
+        </div>
+        <details class="data-details"><summary><span>查看原始测量</span><span class="details-note" id="table-summary">温度 °C · 功率 kW</span><span class="chevron">⌄</span></summary><div class="table-scroll" tabindex="0" role="region" aria-label="测量数据表，可横向滚动"><table><caption class="sr-only">当前数据集的全部测量</caption><thead><tr><th scope="col">测量</th><th scope="col">蒸发温度 °C</th><th scope="col">冷凝温度 °C</th><th scope="col">CO₂ 凝结温度 °C</th><th scope="col">制冷量 kW</th><th scope="col">总功率 kW</th><th scope="col">噪声 σ kW</th><th scope="col">低温级功率 kW</th><th scope="col">低温级噪声 σ kW</th></tr></thead><tbody id="data-table"></tbody></table></div></details>
+      </section>
+      <section id="explanations" class="workflow-section" aria-labelledby="explanations-title">
+        <div class="section-heading"><div><span class="section-index">02 / 分歧</span><h2 id="explanations-title">相似的曲线，不同的答案</h2></div><p>找出隐藏在好拟合背后的参数分歧。</p></div>
+        <div class="explanation-grid">
+          <article class="card parameters-card"><div class="card-heading"><div><h3>两种参数解释</h3><p id="alternative-description">比较满足当前测量的不同参数组合</p></div><div class="pair-legend"><span><i class="legend-dot primary-dot"></i>A</span><span id="parameter-b-legend"><i class="legend-dot amber-dot"></i>B</span></div></div><div id="parameters" class="parameters"><p class="empty-note">分析后显示参数对比</p></div><div id="alternative-note" class="card-footnote">参数条表示允许的搜索区间，不是置信区间。</div></article>
+          <article class="card sensitivity-card"><div class="card-heading"><div><h3>数据能看清多少？</h3><p>四个参数方向的相对灵敏度</p></div><button class="info-button" id="sensitivity-help" aria-label="了解灵敏度和可辨识性">i</button></div><div id="sensitivity-chart" class="sensitivity-chart"><p class="empty-note">分析后显示灵敏度</p></div><div class="insight-box"><span class="insight-icon" aria-hidden="true">↳</span><p id="identifiability-text">弱方向表示：改变一组参数，功率却几乎不变。</p></div></article>
+        </div>
+      </section>
+      <section id="experiments" class="workflow-section" aria-labelledby="experiments-title">
+        <div class="section-heading"><div><span class="section-index">03 / 下一步</span><h2 id="experiments-title">用一个新实验，打开局面</h2></div><span id="design-count" class="micro-badge">等待推荐</span></div>
+        <div class="experiment-intro"><p id="design-note">从可行工况中挑选更能补充信息的测量点。</p><span class="text-chip">D-optimal 实验设计</span></div>
+        <div id="experiment-cards" class="experiment-grid"><div class="card empty-experiments">分析完成后，这里会出现下一次实验的推荐工况。</div></div>
+        <p id="design-bounds" class="experiment-disclaimer"></p><p id="experiment-disclaimer" class="experiment-disclaimer">示例允许添加一次虚拟测量，观察新的证据如何改变解释。</p>
+      </section>
+      <div id="warnings" class="warnings" hidden></div>
+      <footer class="page-footer"><div><strong>FrostLens</strong><span>把不确定性变成下一步行动。</span></div><p>研究原型 · 合成示例不代表设备验证<br><span id="model-version">本地计算 · 可复现导出 · 开源协作</span></p></footer>
+    </div>
+  </div>
+</main>
+<dialog id="import-dialog" class="import-dialog" aria-labelledby="import-title"><form id="import-form"><div class="dialog-heading"><div><div class="eyebrow">YOUR DATA, YOUR LAB</div><h2 id="import-title">带上你自己的测量</h2></div><button type="button" class="close-button" id="close-import" aria-label="关闭导入窗口">×</button></div><p class="dialog-intro">选择 CSV 或粘贴内容。数据只会发送到当前本地服务；最多 250 行，900 KB。</p><label for="csv-file" class="file-zone"><span aria-hidden="true">↥</span><strong id="file-label">选择 CSV 文件</strong><small>UTF-8 编码 · 第一行为字段名称</small><input id="csv-file" type="file" accept=".csv,text/csv"></label><label for="csv-text" class="paste-label">或粘贴 CSV 内容</label><textarea id="csv-text" spellcheck="false" rows="6" placeholder="te_c,tc_c,tm_c,load_kw,power_kw,sigma_kw&#10;-30,35,-5,8,4.1,0.05" required></textarea><details class="csv-spec"><summary>CSV 需要包含哪些列？</summary><p><code>te_c</code> 蒸发温度、<code>tc_c</code> 冷凝温度、<code>tm_c</code> CO₂ 凝结温度（°C）；<code>load_kw</code> 制冷量、<code>power_kw</code> 总功率、<code>sigma_kw</code> 测量噪声标准差（kW）。</p><p>选择双通道时，每行还需提供 <code>low_power_kw</code> 和 <code>sigma_low_kw</code>（低温级功率及其噪声标准差）。数值使用英文小数点，噪声标准差必须大于 0。</p></details><p id="import-error" class="inline-error" role="alert" hidden></p><div class="dialog-footer"><span>使用左侧的测量通道与实验数量设置</span><button class="button primary" id="import-submit" type="submit">导入并分析 <span>↗</span></button></div></form></dialog>
+<dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><div><div class="eyebrow">A LENS, NOT AN ORACLE</div><h2 id="about-title">让结论带着边界</h2></div><button id="close-about" class="close-button" aria-label="关闭方法介绍">×</button></div><div class="about-content"><p class="about-lead">FrostLens 帮你回答的不是“参数真值是多少”，而是“现有测量还分不清什么，下一次该测哪里”。</p><section><span class="section-index">01</span><h3>先拟合，再寻找另一种解释</h3><p>使用稳态双级制冷模型拟合输入的总功率数据，可额外加入低温级功率。多起点搜索尝试寻找参数不同、仍能解释当前数据的解。找到另一组参数是歧义的证据；没有找到，不能证明解唯一。</p></section><section><span class="section-index">02</span><h3>检查测量对参数变化的敏感程度</h3><p>对按噪声和参数尺度归一化的局部雅可比矩阵做奇异值分解。很小的奇异值表示一个难以分辨的参数组合。结果是局部诊断，依赖模型、噪声假设和当前拟合点；参数区间条不是置信区间。</p></section><section><span class="section-index">03</span><h3>推荐能补足信息的工况</h3><p>在候选温度和负荷中，顺序选择提高正则化信息矩阵对数行列式的实验（D-optimal）。信息增益是模型内的相对评分，不是准确率提升百分比。两种解释的预测差异除以假定噪声后，以 σ 表示区分程度。</p><p>推荐工况需经过设备能力、运行边界与实验安全审核。导入数据的来源由用户确认，不会生成虚拟测量；你可以导出工况，在采集新数据后重新导入。</p></section><section><h3>模型假设</h3><ul id="assumptions"><li>加载分析结果后显示当前模型的具体假设。</li></ul></section><section class="about-boundary"><strong>研究工具，不是设备诊断结论</strong><p>噪声、模型缺项和传感器偏差都可能造成不一致。请结合残差、重复实验与领域知识解释结果。内置数据全部为明确标记的合成示例。</p></section><div id="provenance-detail" class="provenance-detail"></div></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

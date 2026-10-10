@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "frostlens"
+version = "0.1.0"
+description = "An experiment detective for NH3/CO2 cascade refrigeration models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "FrostLens contributors"}]
+keywords = ["refrigeration", "identifiability", "experimental-design", "CoolProp", "grey-box"]
+dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2", "CoolProp>=7.2,<9"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+
+[project.scripts]
+frostlens = "frostlens.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["frostlens*"]
+
+[tool.setuptools.package-data]
+frostlens = ["web/*.html", "web/*.css", "web/*.js", "web/*.svg", "web/*.png"]

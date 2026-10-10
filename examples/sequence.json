@@ -1,0 +1,54 @@
+{
+  "kind": "synthetic",
+  "policy": "Re-fit after each new observation; select first current recommendation.",
+  "model": {
+    "name": "NH₃/CO₂ 稳态复叠制冷 · HEOS 等效 UA 模型",
+    "version": "0.1.0",
+    "coolprop_version": "8.0.0",
+    "numpy_version": "2.5.3",
+    "scipy_version": "1.18.1",
+    "assumptions": [
+      "CoolProp HEOS 真实流体物性；CO₂ 为低温级、NH₃ 为高温级。",
+      "压缩机饱和蒸气吸气，冷凝器饱和液体出流；节流等焓；忽略压降、过热、过冷及外界热漏。",
+      "tm 为 CO₂ 凝结温度；复叠换热量 Qc=Qload+Wlow，NH₃ 蒸发温度=tm−Qc/UA。",
+      "两个等熵效率包含于热力学压缩功；默认电机效率为 1，固定辅助功率另计。真实电功率应用需校准或扩展电机模型。",
+      "四个参数在全部测量期间恒定；输入温度与负荷视为准确，测量噪声按给定标准差独立、高斯处理。",
+      "分项模式的总功率与低温级功率也假定噪声独立；同源电表或由分项相加得到总功率时通常不成立。",
+      "局部可辨识性基于参数范围与测量噪声缩放后的 Jacobian，不是全局唯一性证明或置信区间。"
+    ]
+  },
+  "trace": [
+    {
+      "step": 0,
+      "n": 12,
+      "effective_directions": 2,
+      "condition": 4582.667765456281,
+      "rmse_kw": 0.03956589587602758,
+      "smallest_singular_value": 0.2300071371074716
+    },
+    {
+      "step": 1,
+      "n": 13,
+      "effective_directions": 3,
+      "condition": 2776.05333927542,
+      "rmse_kw": 0.038348637761267346,
+      "smallest_singular_value": 0.23193721119950714
+    },
+    {
+      "step": 2,
+      "n": 14,
+      "effective_directions": 3,
+      "condition": 1470.953365532872,
+      "rmse_kw": 0.03937416318679938,
+      "smallest_singular_value": 0.2483038486358358
+    },
+    {
+      "step": 3,
+      "n": 15,
+      "effective_directions": 4,
+      "condition": 36.16909895719558,
+      "rmse_kw": 0.038165303365835776,
+      "smallest_singular_value": 11.736774206002885
+    }
+  ]
+}

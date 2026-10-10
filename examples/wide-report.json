@@ -1,0 +1,475 @@
+{
+  "alternative": null,
+  "budget": 3,
+  "design": [
+    {
+      "alternative_kw": null,
+      "channel": "power",
+      "gain": 0.587670844092815,
+      "point": {
+        "load_kw": 14.0,
+        "tc_c": 44.0,
+        "te_c": -28.0,
+        "tm_c": -15.0
+      },
+      "predicted_kw": 8.940650022644999,
+      "rank": 1,
+      "separation_sigma": null,
+      "smallest_singular_after": 26.450435815969932,
+      "smallest_singular_before": 26.415027421060156
+    },
+    {
+      "alternative_kw": null,
+      "channel": "power",
+      "gain": 0.50194756712784,
+      "point": {
+        "load_kw": 14.0,
+        "tc_c": 24.0,
+        "te_c": -48.0,
+        "tm_c": 2.0
+      },
+      "predicted_kw": 10.790805621580443,
+      "rank": 2,
+      "separation_sigma": null,
+      "smallest_singular_after": 27.26222078874535,
+      "smallest_singular_before": 26.450435815969932
+    },
+    {
+      "alternative_kw": null,
+      "channel": "power",
+      "gain": 0.40459004788373304,
+      "point": {
+        "load_kw": 9.0,
+        "tc_c": 44.0,
+        "te_c": -48.0,
+        "tm_c": 2.0
+      },
+      "predicted_kw": 8.53198815368103,
+      "rank": 3,
+      "separation_sigma": null,
+      "smallest_singular_after": 31.38675165357328,
+      "smallest_singular_before": 27.262220788745342
+    }
+  ],
+  "design_meta": {
+    "bounds": {
+      "load_kw": [
+        4.0,
+        14.0
+      ],
+      "tc_c": [
+        24.0,
+        44.0
+      ],
+      "te_c": [
+        -48.0,
+        -28.0
+      ],
+      "tm_c": [
+        -15.0,
+        2.0
+      ]
+    },
+    "candidate_count": 81,
+    "criterion": "顺序局部 D-optimal：最大化 log det 信息矩阵增量",
+    "note": "在用户范围内每个输入取最多 3 个值并筛除无效物性；逐点更新当前最优模型的局部信息矩阵。未来噪声使用当前标准差的中位数。预测差/噪声是模型间差异，并非保证可区分的概率。",
+    "prospective_sigma_kw": 0.045,
+    "prospective_sigma_low_kw": null,
+    "ridge": 1e-06
+  },
+  "fit": {
+    "converged": true,
+    "residual_count": 16,
+    "search_method": "multistart",
+    "weighted_sse": 11.148610732940913
+  },
+  "identifiability": {
+    "effective_direction_threshold": 1.0,
+    "explanation": "Jacobian 按各参数完整边界宽度和各观测标准差缩放。有效秩为奇异值≥1的方向数：单位参数尺度变化产生至少单位噪声尺度响应。最弱方向是局部组合变化，符号可整体翻转。该阈值是描述性尺度，不是显著性检验。",
+    "numerical_rank_threshold": 1.5745565555297e-12,
+    "parameter_scales": {
+      "aux_kw": 2.0,
+      "eta_high": 0.5,
+      "eta_low": 0.5,
+      "ua_kw_k": 5.4
+    },
+    "relative_singular_values": [
+      1.0,
+      0.22248777585654309,
+      0.16252505341882403,
+      0.05960092631485068
+    ],
+    "singular_values": [
+      443.198269797333,
+      98.60619731067673,
+      72.03082247394194,
+      26.415027421060156
+    ],
+    "weak_direction": [
+      {
+        "name": "低温级等熵效率",
+        "weight": -0.3255203821484407
+      },
+      {
+        "name": "高温级等熵效率",
+        "weight": -0.5542099199664492
+      },
+      {
+        "name": "复叠换热器等效 UA",
+        "weight": 0.6856936518122313
+      },
+      {
+        "name": "固定辅助功率",
+        "weight": -0.34163146998062405
+      }
+    ]
+  },
+  "model": {
+    "assumptions": [
+      "CoolProp HEOS 真实流体物性；CO₂ 为低温级、NH₃ 为高温级。",
+      "压缩机饱和蒸气吸气，冷凝器饱和液体出流；节流等焓；忽略压降、过热、过冷及外界热漏。",
+      "tm 为 CO₂ 凝结温度；复叠换热量 Qc=Qload+Wlow，NH₃ 蒸发温度=tm−Qc/UA。",
+      "两个等熵效率包含于热力学压缩功；默认电机效率为 1，固定辅助功率另计。真实电功率应用需校准或扩展电机模型。",
+      "四个参数在全部测量期间恒定；输入温度与负荷视为准确，测量噪声按给定标准差独立、高斯处理。",
+      "分项模式的总功率与低温级功率也假定噪声独立；同源电表或由分项相加得到总功率时通常不成立。",
+      "局部可辨识性基于参数范围与测量噪声缩放后的 Jacobian，不是全局唯一性证明或置信区间。"
+    ],
+    "coolprop_version": "8.0.0",
+    "name": "NH₃/CO₂ 稳态复叠制冷 · HEOS 等效 UA 模型",
+    "numpy_version": "2.5.3",
+    "scipy_version": "1.18.1",
+    "version": "0.1.0"
+  },
+  "parameters": [
+    {
+      "key": "eta_low",
+      "lower": 0.4,
+      "name": "低温级等熵效率",
+      "unit": "",
+      "upper": 0.9,
+      "value": 0.6936665625936032
+    },
+    {
+      "key": "eta_high",
+      "lower": 0.4,
+      "name": "高温级等熵效率",
+      "unit": "",
+      "upper": 0.9,
+      "value": 0.7284036389355724
+    },
+    {
+      "key": "ua_kw_k",
+      "lower": 0.6,
+      "name": "复叠换热器等效 UA",
+      "unit": "kW/K",
+      "upper": 6.0,
+      "value": 1.9283111968679525
+    },
+    {
+      "key": "aux_kw",
+      "lower": 0.0,
+      "name": "固定辅助功率",
+      "unit": "kW",
+      "upper": 2.0,
+      "value": 0.3164453235678293
+    }
+  ],
+  "predictions": [
+    {
+      "alternative_kw": null,
+      "fitted_kw": 2.7182053842093667,
+      "fitted_low_power_kw": 1.0591319515040953,
+      "observed_kw": 2.6788628406383843,
+      "residual_kw": -0.039342543570982436
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 9.142218595930274,
+      "fitted_low_power_kw": 3.23497104866823,
+      "observed_kw": 9.066031928771588,
+      "residual_kw": -0.0761866671586855
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 3.779969921945361,
+      "fitted_low_power_kw": 1.859309138471124,
+      "observed_kw": 3.7144632227302226,
+      "residual_kw": -0.0655066992151383
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 6.286289682360277,
+      "fitted_low_power_kw": 1.2134426769762625,
+      "observed_kw": 6.307173811842558,
+      "residual_kw": 0.020884129482281466
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 10.790805621580443,
+      "fitted_low_power_kw": 6.507581984648934,
+      "observed_kw": 10.830582375230428,
+      "residual_kw": 0.0397767536499849
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 2.5095803179779668,
+      "fitted_low_power_kw": 0.3466979077075036,
+      "observed_kw": 2.5591583825975004,
+      "residual_kw": 0.049578064619533624
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 12.91701520762383,
+      "fitted_low_power_kw": 3.7069618302643335,
+      "observed_kw": 12.92375660973041,
+      "residual_kw": 0.006741402106579031
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 1.9140463315149185,
+      "fitted_low_power_kw": 0.9242774424766371,
+      "observed_kw": 1.9143220199706472,
+      "residual_kw": 0.0002756884557286732
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 6.073841849524585,
+      "fitted_low_power_kw": 2.3527580605945264,
+      "observed_kw": 6.092864388223368,
+      "residual_kw": 0.01902253869878301
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 11.57344235148182,
+      "fitted_low_power_kw": 4.909074420325171,
+      "observed_kw": 11.538893744278646,
+      "residual_kw": -0.03454860720317399
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 2.1521663815078944,
+      "fitted_low_power_kw": 0.5961328059554584,
+      "observed_kw": 2.114310016014528,
+      "residual_kw": -0.03785636549336635
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 6.976406947955673,
+      "fitted_low_power_kw": 3.039486100767582,
+      "observed_kw": 7.005241899247901,
+      "residual_kw": 0.028834951292227906
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 4.878549874186627,
+      "fitted_low_power_kw": 1.5112183555771976,
+      "observed_kw": 4.904260851126463,
+      "residual_kw": 0.025710976939836705
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 4.662402223157707,
+      "fitted_low_power_kw": 1.51693664760823,
+      "observed_kw": 4.698221336632318,
+      "residual_kw": 0.035819113474611086
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 6.428486937868743,
+      "fitted_low_power_kw": 2.6508321649630835,
+      "observed_kw": 6.453877043490059,
+      "residual_kw": 0.02539010562131594
+    },
+    {
+      "alternative_kw": null,
+      "fitted_kw": 5.512720306173351,
+      "fitted_low_power_kw": 2.0111181954143564,
+      "observed_kw": 5.514126848139226,
+      "residual_kw": 0.0014065419658741973
+    }
+  ],
+  "rows": [
+    {
+      "load_kw": 4.0,
+      "low_power_kw": 1.0636249399395519,
+      "power_kw": 2.6788628406383843,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 24.0,
+      "te_c": -48.0,
+      "tm_c": -15.0
+    },
+    {
+      "load_kw": 14.0,
+      "low_power_kw": 3.1909717561609323,
+      "power_kw": 9.066031928771588,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 44.0,
+      "te_c": -28.0,
+      "tm_c": 2.0
+    },
+    {
+      "load_kw": 4.0,
+      "low_power_kw": 1.8228287042206481,
+      "power_kw": 3.7144632227302226,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 44.0,
+      "te_c": -48.0,
+      "tm_c": 2.0
+    },
+    {
+      "load_kw": 14.0,
+      "low_power_kw": 1.184614790229836,
+      "power_kw": 6.307173811842558,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 24.0,
+      "te_c": -28.0,
+      "tm_c": -15.0
+    },
+    {
+      "load_kw": 14.0,
+      "low_power_kw": 6.434900870035934,
+      "power_kw": 10.830582375230428,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 24.0,
+      "te_c": -48.0,
+      "tm_c": 2.0
+    },
+    {
+      "load_kw": 4.0,
+      "low_power_kw": 0.3519780438060312,
+      "power_kw": 2.5591583825975004,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 44.0,
+      "te_c": -28.0,
+      "tm_c": -15.0
+    },
+    {
+      "load_kw": 14.0,
+      "low_power_kw": 3.7115216947798433,
+      "power_kw": 12.92375660973041,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 44.0,
+      "te_c": -48.0,
+      "tm_c": -15.0
+    },
+    {
+      "load_kw": 4.0,
+      "low_power_kw": 0.9317137944930551,
+      "power_kw": 1.9143220199706472,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 24.0,
+      "te_c": -28.0,
+      "tm_c": 2.0
+    },
+    {
+      "load_kw": 9.0,
+      "low_power_kw": 2.3485958648067067,
+      "power_kw": 6.092864388223368,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 34.0,
+      "te_c": -40.0,
+      "tm_c": -7.0
+    },
+    {
+      "load_kw": 14.0,
+      "low_power_kw": 4.88694723158345,
+      "power_kw": 11.538893744278646,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 34.0,
+      "te_c": -48.0,
+      "tm_c": -7.0
+    },
+    {
+      "load_kw": 4.0,
+      "low_power_kw": 0.6030475020711676,
+      "power_kw": 2.114310016014528,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 34.0,
+      "te_c": -28.0,
+      "tm_c": -7.0
+    },
+    {
+      "load_kw": 9.0,
+      "low_power_kw": 3.0346834098369007,
+      "power_kw": 7.005241899247901,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 44.0,
+      "te_c": -38.0,
+      "tm_c": 2.0
+    },
+    {
+      "load_kw": 9.0,
+      "low_power_kw": 1.506495439926291,
+      "power_kw": 4.904260851126463,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 24.0,
+      "te_c": -38.0,
+      "tm_c": -15.0
+    },
+    {
+      "load_kw": 6.0,
+      "low_power_kw": 1.4982821274801874,
+      "power_kw": 4.698221336632318,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 40.0,
+      "te_c": -44.0,
+      "tm_c": -12.0
+    },
+    {
+      "load_kw": 12.0,
+      "low_power_kw": 2.6167678917708996,
+      "power_kw": 6.453877043490059,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 28.0,
+      "te_c": -32.0,
+      "tm_c": -3.0
+    },
+    {
+      "load_kw": 8.0,
+      "low_power_kw": 2.0302184636912117,
+      "power_kw": 5.514126848139226,
+      "sigma_kw": 0.045,
+      "sigma_low_kw": 0.025,
+      "tc_c": 36.0,
+      "te_c": -40.0,
+      "tm_c": -8.0
+    }
+  ],
+  "sensor_mode": "power",
+  "summary": {
+    "condition": 16.778262718893874,
+    "message": "在当前模型、噪声与参数尺度下，四个局部参数方向均有信息；这不证明全局唯一。",
+    "n": 16,
+    "numerical_rank": 4,
+    "rank": 4,
+    "rmse_kw": 0.03756322730926929,
+    "status": "informative",
+    "weighted_rmse": 0.8347383846504287
+  },
+  "warnings": [
+    "全部推断依赖理想稳态循环；本工具不构成设备故障确诊。",
+    "输入温度和负荷误差尚未传播，参数界限会影响可辨识性指标。"
+  ],
+  "provenance": {
+    "kind": "synthetic",
+    "case_id": "wide",
+    "created_at": "2026-10-09T05:36:46.773316+00:00",
+    "data_sha256": "f2be296a30d22fe13dde55ae49fdec7888cfbcd6bb19f4753e03180c5ab6fdb5",
+    "software_version": "0.1.0"
+  }
+}
