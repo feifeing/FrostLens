@@ -8,8 +8,22 @@ import sys
 from . import __version__
 
 
+def _write_message(message, stream):
+    """Keep the stream's encoding, escaping only characters it cannot represent."""
+    try:
+        stream.write(message)
+    except UnicodeEncodeError as exc:
+        stream.write(message.encode(exc.encoding, errors="backslashreplace").decode(exc.encoding))
+
+
+class _ArgumentParser(argparse.ArgumentParser):
+    def _print_message(self, message, file=None):
+        if message:
+            _write_message(message, sys.stderr if file is None else file)
+
+
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="FrostLens — find the next informative refrigeration experiment.")
+    parser = _ArgumentParser(description="FrostLens — find the next informative refrigeration experiment.")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command")
     server = commands.add_parser("serve", help="Open the local research workbench")
@@ -40,11 +54,11 @@ def main(argv=None):
         report = build_report(rows, args.sensor_mode, args.budget, case_id)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, ensure_ascii=False, allow_nan=False, indent=2) + "\n", encoding="utf-8")
-        print(f"Report: {args.output.resolve()}")
-        print(report["summary"]["message"])
+        _write_message(f"Report: {args.output.resolve()}\n", sys.stdout)
+        _write_message(report["summary"]["message"] + "\n", sys.stdout)
         return 0
     except (ValueError, OSError, ImportError) as exc:
-        print(f"FrostLens: {exc}", file=sys.stderr)
+        _write_message(f"FrostLens: {exc}\n", sys.stderr)
         return 1
 
 

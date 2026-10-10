@@ -10,6 +10,12 @@
 - 1440 px 桌面和 390 px 手机宽度未出现整页横向溢出，已检查截图。
 - 项目已发布到 [feifeing/FrostLens](https://github.com/feifeing/FrostLens)。GitHub Actions 配置已提供，云端结果以 [Actions 记录](https://github.com/feifeing/FrostLens/actions)为准。macOS/Linux 启动脚本已提供，本次本机验证没有在这些操作系统上执行。
 
+## 发布时的补充验证（2026-10-10）
+
+首次 GitHub Actions 运行中，Linux 和浏览器任务通过；Windows 的计算测试通过，但示例命令在打印中文摘要时遇到系统输出编码限制。报告文件已写出，命令却错误地返回失败。
+
+CLI 现保留终端原有编码，仅将无法表示的字符转义；UTF-8 终端和 JSON 报告仍完整保留中文。新增 5 项子进程回归检查，覆盖旧编码与 UTF-8 输出、中文文件名、CSV 验证错误、缺失文件和参数错误。当前 Python 测试合计 36 项；各平台实际通过情况以以上 Actions 链接中的运行结果为准。
+
 ## 科学检查是什么
 
 1. 用独立的 CoolProp `PropsSI` 焓值计算核对主实现的低层 `AbstractState` 循环结果。它验证程序与能量方程的一致性，不是独立物性数据库验证。
