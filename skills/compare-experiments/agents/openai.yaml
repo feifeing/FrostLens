@@ -1,0 +1,4 @@
+interface:
+  display_name: "StateLens · 实验状态比较"
+  short_description: "整理实验文件，检查比较条件，生成可追溯的交互报告"
+  default_prompt: "使用 $compare-experiments 分析这个实验文件夹，比较不同状态，生成可追溯的交互报告，并用清楚的中文解释判断依据。"

@@ -1,43 +1,51 @@
-# FrostLens
+# StateLens · Experimental state comparison
 
-**Two explanations fit your data. Which experiment should you run next?**
+The second generation of FrostLens: a portable **Codex / Claude Code skill** for comparing experimental states across disciplines.
 
-[中文](README.md) · [Research positioning](docs/RESEARCH.md) · [Methods](docs/METHODS.md)
+Give the assistant a folder of experiment files. It inventories inputs, extracts available evidence, normalizes a comparison contract, checks declared controls and units, and produces a traceable interactive report. Suitable for controls/treatments, materials, operating states, ablations and paired before/after studies.
 
-FrostLens is a local, open-source experiment workbench for NH₃/CO₂ cascade refrigeration. Fit bounded grey-box parameters, inspect a competing explanation, diagnose weak local parameter directions, and choose the next experiment within your operating envelope.
+[中文](README.md) · [Download skill ZIP](https://github.com/feifeing/FrostLens/raw/refs/heads/main/downloads/compare-experiments-v0.2.0.zip) · [Installation](docs/INSTALL.md) · [First-generation refrigeration workbench](FROSTLENS.en.md)
 
-The first release has a Chinese interface, three reproducible synthetic cases, CSV import, JSON/CSV export, and a virtual-measurement loop. All thermodynamic calculations use CoolProp. There is no account, API key, telemetry, cloud backend, or browser dependency download.
+![StateLens report](docs/statelens.png)
 
-## Run
+## Install and try
 
-Python 3.11 or newer. On Windows, double-click `start.bat`; on macOS/Linux, run `sh start.sh`. The first run creates a virtual environment and installs dependencies. Or install manually:
-
-```bash
-python -m venv .venv
-# Activate .venv for your OS, then:
-python -m pip install .
-python -m frostlens serve --open
-```
-
-Visit http://127.0.0.1:8765. Installation downloads dependencies; operation is local and offline. You may also open `frostlens/web/index.html` directly to inspect the included read-only computed snapshot. Recalculation and import require the server.
+Extract the skill ZIP and open a terminal in `compare-experiments`. Python 3.11+ is required; the skill has no third-party Python dependencies.
 
 ```bash
-python -m frostlens demo --case narrow --output local-reports/demo.json
-python -m frostlens analyze examples/wide.csv --sensor-mode split --output local-reports/result.json
-python -m unittest discover -s tests -v
+python scripts/install.py --target codex
+# Alternatively:
+python scripts/install.py --target claude
+# A standalone synthetic demonstration:
+python scripts/statelens.py demo --out demo-report --open
 ```
 
-## Input contract
+Use `$compare-experiments` in Codex CLI or `/compare-experiments` in Claude Code. Ask it to compare a folder, identify uncontrolled differences and retain provenance. Restart the host session if discovery has not refreshed. Host documentation links and installation scopes are in [INSTALL.md](docs/INSTALL.md).
 
-Required CSV columns: `te_c,tc_c,tm_c,load_kw,power_kw,sigma_kw`.
-Optional channels: `low_power_kw,sigma_low_kw` (both required for split mode).
+## What is implemented
 
-Temperatures are °C; loads, powers, and one-standard-deviation uncertainties are kW. `tm_c` is the CO₂ condensing saturation temperature, not a mean cascade temperature. At most 250 rows. Empty, nonfinite, out-of-domain and nonpositive-uncertainty inputs are rejected. Download an example through the UI or use `examples/`.
+- Local extraction of CSV, TSV, XLSX cached values, JSON, JSONL and text/logs. Other formats become explicit host extraction tasks, never fabricated values.
+- Comparison contracts defining the baseline, sampling unit, design, controls, metrics, units and practical margins.
+- Unit conversion, missing-data diagnostics, strict paired alignment, deterministic paired/independent percentile bootstrap intervals, and descriptive mode when inference is unsupported.
+- An offline HTML report with study/state selection, condition differences, metric intervals, practical-margin sensitivity, within-study Pareto tradeoffs, JSON and CSV export.
+- Raw-file and normalized-data fingerprints, source records, reproducible settings, a portable installer and a standalone ZIP.
 
-## Scope and originality
+The demonstration contains fictional computing, materials, chemistry-control and thermal-engineering data. It is not validation on real experimental systems.
 
-The contribution is the refrigeration-specific workflow: **competing explanations → identifiability → experiment design → new evidence**, with visible assumptions and reproducible artifacts. Least squares, Fisher information, D-optimal design and cascade-cycle simulation are established methods, not new algorithms claimed by this project.
+## Scope and limits
 
-This is an alpha research tool using a steady-state two-loop model with an equivalent cascade UA. Example observations are synthetic. No real equipment validation or energy-saving benefit is claimed. Local singular values do not prove global identifiability; displayed alternative fits are not confidence regions. Noise covariance and input uncertainty are not yet modeled. The operating envelope is a candidate-domain filter, not equipment safety certification.
+“Automatic” means format detection, routing and assistant-assisted interpretation. The Python extractor alone does not understand every instrument format or research design. Images, PDFs, audio/video and proprietary files require suitable host tools or a supported export. Graph digitization and derived features must preserve source locations and extraction uncertainty.
 
-Contributions are welcome: independent benchmarks, correlated-noise support, pressure/discharge-temperature limits, model extensions and translations. See [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed; dependencies retain their own licenses.
+Studies share a workflow, not a universal score. Time samples, pixels and technical replicates are not automatically independent experimental units. Comparability checks cover declared controls only. Bootstrap labels are exploratory, unadjusted for multiple comparisons, and not causal or confirmatory significance claims. Practical margins are user choices, not estimated measurement error.
+
+Bundled scripts make no network calls. Model-assisted extraction follows the host's own data policies. Generated reports embed supplied experimental evidence; review before sharing.
+
+## Development
+
+```bash
+python -m unittest discover -s tests -p "test_statelens_*.py" -v
+python tools/rebuild_statelens_demo.py
+python tools/package_statelens.py
+```
+
+The original CoolProp refrigeration workbench remains independent at version 0.1; its instructions are in [FROSTLENS.en.md](FROSTLENS.en.md). StateLens skill version is 0.2.0. MIT license. The implementation is original to this project; bootstrap resampling and Pareto dominance are established methods.

@@ -1,0 +1,1193 @@
+{
+  "schema_version": "1.0",
+  "title": "StateLens · 四个领域，一种比较语言",
+  "synthetic": true,
+  "sources": [
+    {
+      "id": "synthetic-generator",
+      "file": "tools/rebuild_statelens_demo.py",
+      "method": "deterministic fictional examples",
+      "verified": false,
+      "locator": "generated values; not real experimental evidence"
+    }
+  ],
+  "studies": [
+    {
+      "id": "computing",
+      "label": "快一点，还是更准确？",
+      "domain": "计算机科学",
+      "question": "相同测试集与硬件下，缓存和量化分别改变什么？",
+      "baseline": "baseline",
+      "design": "paired",
+      "context_keys": [
+        "hardware",
+        "testset"
+      ],
+      "varying": [
+        "treatment"
+      ],
+      "metrics": [
+        {
+          "id": "latency",
+          "label": "响应时间",
+          "unit": "ms",
+          "direction": "lower",
+          "margin": 3
+        },
+        {
+          "id": "accuracy",
+          "label": "准确率",
+          "unit": "%",
+          "direction": "higher",
+          "margin": 0.5
+        }
+      ],
+      "states": [
+        {
+          "id": "baseline",
+          "label": "原始模型",
+          "context": {
+            "hardware": "CPU-A",
+            "testset": "fixed-v1",
+            "treatment": "baseline"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "latency": 48.7,
+                "accuracy": 93.615
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "latency": 53.2,
+                "accuracy": 94.14
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "latency": 54.4,
+                "accuracy": 94.28
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "latency": 50.2,
+                "accuracy": 93.79
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "latency": 55.0,
+                "accuracy": 94.35
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "latency": 51.4,
+                "accuracy": 93.93
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "latency": 52.9,
+                "accuracy": 94.105
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "latency": 50.2,
+                "accuracy": 93.79
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/baseline/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "cache",
+          "label": "增加缓存",
+          "context": {
+            "hardware": "CPU-A",
+            "testset": "fixed-v1",
+            "treatment": "cache"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "latency": 0.03934,
+                "accuracy": 93.673
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-1",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "latency": 0.0442,
+                "accuracy": 94.24
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-2",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "latency": 0.045759999999999995,
+                "accuracy": 94.422
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-3",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "latency": 0.04084,
+                "accuracy": 93.848
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-4",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "latency": 0.046,
+                "accuracy": 94.45
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-5",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "latency": 0.04276,
+                "accuracy": 94.072
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-6",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "latency": 0.04354,
+                "accuracy": 94.163
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-7",
+              "units": {
+                "latency": "s"
+              }
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "latency": 0.0412,
+                "accuracy": 93.89
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/cache/unit-8",
+              "units": {
+                "latency": "s"
+              }
+            }
+          ]
+        },
+        {
+          "id": "quantized",
+          "label": "轻量量化",
+          "context": {
+            "hardware": "CPU-A",
+            "testset": "fixed-v1",
+            "treatment": "quantized"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "latency": 26.98,
+                "accuracy": 91.331
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "latency": 32.2,
+                "accuracy": 91.94
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "latency": 34.12,
+                "accuracy": 92.164
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "latency": 28.48,
+                "accuracy": 91.506
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "latency": 34.0,
+                "accuracy": 92.15
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "latency": 31.12,
+                "accuracy": 91.814
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "latency": 31.18,
+                "accuracy": 91.821
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "latency": 29.2,
+                "accuracy": 91.59
+              },
+              "source_id": "synthetic-generator",
+              "locator": "computing/quantized/unit-8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "materials",
+      "label": "更强，也更重？",
+      "domain": "材料科学",
+      "question": "相同测试协议下，强化方案如何改变强度和质量？",
+      "baseline": "baseline",
+      "design": "independent",
+      "context_keys": [
+        "protocol",
+        "batch"
+      ],
+      "varying": [
+        "treatment"
+      ],
+      "metrics": [
+        {
+          "id": "strength",
+          "label": "拉伸强度",
+          "unit": "MPa",
+          "direction": "higher",
+          "margin": 10
+        },
+        {
+          "id": "mass",
+          "label": "试样质量",
+          "unit": "g",
+          "direction": "lower",
+          "margin": 0.5
+        }
+      ],
+      "states": [
+        {
+          "id": "baseline",
+          "label": "原始材料",
+          "context": {
+            "protocol": "tensile-v1",
+            "batch": "B-1",
+            "treatment": "raw"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "strength": 211.2,
+                "mass": 9.835
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "strength": 223.2,
+                "mass": 10.06
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "strength": 226.4,
+                "mass": 10.12
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "strength": 215.2,
+                "mass": 9.91
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "strength": 228.0,
+                "mass": 10.15
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "strength": 218.4,
+                "mass": 9.97
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "strength": 222.4,
+                "mass": 10.045
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "strength": 215.2,
+                "mass": 9.91
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/baseline/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "reinforced",
+          "label": "强化方案",
+          "context": {
+            "protocol": "tensile-v1",
+            "batch": "B-1",
+            "treatment": "reinforced"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "strength": 240.24,
+                "mass": 11.217
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "strength": 253.2,
+                "mass": 11.46
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "strength": 257.36,
+                "mass": 11.538
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "strength": 244.24,
+                "mass": 11.292
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "strength": 258.0,
+                "mass": 11.55
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "strength": 249.36,
+                "mass": 11.388
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "strength": 251.44,
+                "mass": 11.427
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "strength": 245.2,
+                "mass": 11.31
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/reinforced/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "hot_test",
+          "label": "换了测试协议",
+          "context": {
+            "protocol": "hot-tensile-v2",
+            "batch": "B-1",
+            "treatment": "reinforced"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "strength": 279.28,
+                "mass": 11.099
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "strength": 293.2,
+                "mass": 11.36
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "strength": 298.32,
+                "mass": 11.456
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "strength": 283.28,
+                "mass": 11.174
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "strength": 298.0,
+                "mass": 11.45
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "strength": 290.32,
+                "mass": 11.306
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "strength": 290.48,
+                "mass": 11.309
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "strength": 285.2,
+                "mass": 11.21
+              },
+              "source_id": "synthetic-generator",
+              "locator": "materials/hot_test/unit-8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chemistry",
+      "label": "接近目标，值得多少能耗？",
+      "domain": "化学实验",
+      "question": "在同批原料下，反应温度能否更接近目标并降低能耗？",
+      "baseline": "baseline",
+      "design": "paired",
+      "context_keys": [
+        "feedstock",
+        "duration"
+      ],
+      "varying": [
+        "treatment"
+      ],
+      "metrics": [
+        {
+          "id": "temperature",
+          "label": "稳态温度",
+          "unit": "degC",
+          "direction": "target",
+          "margin": 0.5,
+          "target": 60
+        },
+        {
+          "id": "energy",
+          "label": "平均输入功率",
+          "unit": "W",
+          "direction": "lower",
+          "margin": 5
+        }
+      ],
+      "states": [
+        {
+          "id": "baseline",
+          "label": "原始控制",
+          "context": {
+            "feedstock": "lot-A",
+            "duration": "30min",
+            "treatment": "baseline"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "temperature": 63.56,
+                "energy": 117.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "temperature": 64.16,
+                "energy": 120.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "temperature": 64.32,
+                "energy": 121.6
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "temperature": 63.76,
+                "energy": 118.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "temperature": 64.4,
+                "energy": 122.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "temperature": 63.92,
+                "energy": 119.6
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "temperature": 64.12,
+                "energy": 120.6
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "temperature": 63.76,
+                "energy": 118.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/baseline/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "adaptive",
+          "label": "自适应控制",
+          "context": {
+            "feedstock": "lot-A",
+            "duration": "30min",
+            "treatment": "adaptive"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "temperature": 333.162,
+                "energy": 105.56
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-1",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "temperature": 333.80999999999995,
+                "energy": 108.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-2",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "temperature": 334.018,
+                "energy": 109.84
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-3",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "temperature": 333.36199999999997,
+                "energy": 106.56
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-4",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "temperature": 334.04999999999995,
+                "energy": 110.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-5",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "temperature": 333.618,
+                "energy": 107.84
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-6",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "temperature": 333.722,
+                "energy": 108.36
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-7",
+              "units": {
+                "temperature": "K"
+              }
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "temperature": 333.40999999999997,
+                "energy": 106.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/adaptive/unit-8",
+              "units": {
+                "temperature": "K"
+              }
+            }
+          ]
+        },
+        {
+          "id": "low_power",
+          "label": "低功率控制",
+          "context": {
+            "feedstock": "lot-A",
+            "duration": "30min",
+            "treatment": "low-power"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "temperature": 56.464,
+                "energy": 88.32
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "temperature": 57.16,
+                "energy": 91.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "temperature": 57.416,
+                "energy": 93.08
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "temperature": 56.664,
+                "energy": 89.32
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "temperature": 57.4,
+                "energy": 93.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "temperature": 57.016,
+                "energy": 91.08
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "temperature": 57.024,
+                "energy": 91.12
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "temperature": 56.76,
+                "energy": 89.8
+              },
+              "source_id": "synthetic-generator",
+              "locator": "chemistry/low_power/unit-8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thermal",
+      "label": "相同负荷，真正改善了吗？",
+      "domain": "热流工程",
+      "question": "同一负荷与边界温度下，改造方案的功率和稳定性如何变化？",
+      "baseline": "baseline",
+      "design": "paired",
+      "context_keys": [
+        "load",
+        "ambient"
+      ],
+      "varying": [
+        "treatment"
+      ],
+      "metrics": [
+        {
+          "id": "power",
+          "label": "输入功率",
+          "unit": "kW",
+          "direction": "lower",
+          "margin": 0.1
+        },
+        {
+          "id": "settling",
+          "label": "稳定时间",
+          "unit": "s",
+          "direction": "lower",
+          "margin": 5
+        }
+      ],
+      "states": [
+        {
+          "id": "baseline",
+          "label": "原始系统",
+          "context": {
+            "load": "8kW",
+            "ambient": "25degC",
+            "treatment": "baseline"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "power": 4.412,
+                "settling": 76.7
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "power": 4.532,
+                "settling": 81.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "power": 4.564,
+                "settling": 82.4
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "power": 4.452,
+                "settling": 78.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "power": 4.58,
+                "settling": 83.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "power": 4.484,
+                "settling": 79.4
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "power": 4.524,
+                "settling": 80.9
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "power": 4.452,
+                "settling": 78.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/baseline/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "retuned",
+          "label": "重新整定",
+          "context": {
+            "load": "8kW",
+            "ambient": "25degC",
+            "treatment": "retuned"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "power": 4.0824,
+                "settling": 87.34
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "power": 4.212,
+                "settling": 92.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "power": 4.2536,
+                "settling": 93.76
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "power": 4.1224,
+                "settling": 88.84
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "power": 4.26,
+                "settling": 94.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "power": 4.1736,
+                "settling": 90.76
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "power": 4.1944,
+                "settling": 91.54
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "power": 4.132,
+                "settling": 89.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/retuned/unit-8"
+            }
+          ]
+        },
+        {
+          "id": "light_load",
+          "label": "降低了负荷",
+          "context": {
+            "load": "6kW",
+            "ambient": "25degC",
+            "treatment": "retuned"
+          },
+          "observations": [
+            {
+              "replicate": "unit-1",
+              "values": {
+                "power": 3.3928,
+                "settling": 59.98
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-1"
+            },
+            {
+              "replicate": "unit-2",
+              "values": {
+                "power": 3.532,
+                "settling": 65.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-2"
+            },
+            {
+              "replicate": "unit-3",
+              "values": {
+                "power": 3.5832,
+                "settling": 67.12
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-3"
+            },
+            {
+              "replicate": "unit-4",
+              "values": {
+                "power": 3.4328,
+                "settling": 61.48
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-4"
+            },
+            {
+              "replicate": "unit-5",
+              "values": {
+                "power": 3.58,
+                "settling": 67.0
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-5"
+            },
+            {
+              "replicate": "unit-6",
+              "values": {
+                "power": 3.5032,
+                "settling": 64.12
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-6"
+            },
+            {
+              "replicate": "unit-7",
+              "values": {
+                "power": 3.5048,
+                "settling": 64.18
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-7"
+            },
+            {
+              "replicate": "unit-8",
+              "values": {
+                "power": 3.452,
+                "settling": 62.2
+              },
+              "source_id": "synthetic-generator",
+              "locator": "thermal/light_load/unit-8"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

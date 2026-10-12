@@ -1,112 +1,92 @@
-<div align="center">
+# StateLens · 实验状态比较
 
-# FrostLens · 霜镜
+**FrostLens 第二版：面向不同学科、可在 Codex 和 Claude Code 中使用的实验比较 skill。**
 
-**两个解释，都拟合得很好。下一次实验，该怎么做？**
+把实验文件或文件夹交给助手，它会识别数据、整理实验状态、检查比较条件，并输出可追溯的交互报告。适用于对照组与处理组、不同材料或工况、模型消融、同一样本处理前后等问题。
 
-面向 NH₃/CO₂ 复叠制冷的开源实验侦探工作台。
+[English](README.en.md) · [下载 skill](https://github.com/feifeing/FrostLens/raw/refs/heads/main/downloads/compare-experiments-v0.2.0.zip) · [安装说明](docs/INSTALL.md) · [新手教程](docs/GETTING_STARTED.md) · [验证记录](docs/STATELENS_VALIDATION.md) · [第一版制冷工作台](FROSTLENS.md)
 
-[English](README.en.md) · [研究定位与原创边界](docs/RESEARCH.md) · [计算方法](docs/METHODS.md) · [验证记录](docs/VALIDATION.md) · [参与贡献](CONTRIBUTING.md)
+![StateLens 实验比较报告](docs/statelens.png)
 
-</div>
+## 可以解决哪些问题
 
-FrostLens 把“拟合一条漂亮曲线”往前推进一步：寻找同样能解释数据、参数却不同的替代解释，显示当前数据看不清的方向，再推荐一批更有信息量的实验。
-
-![FrostLens 工作台：真实计算的合成案例](docs/screenshot.png)
-
-它连接**灰箱建模、参数可辨识性和实验方案设计**。制冷研究者可以导入工况 CSV；第一次接触这些概念的人，可以直接在虚拟实验室里看见证据如何改变判断。
-
-## 三步开始
-
-1. **载入数据**：选择内置案例，或导入自己的 CSV。
-2. **看清分歧**：对比拟合、参数和弱辨识方向，而不只看拟合误差。
-3. **选择下一次测量**：限定设备允许的工况，获得推荐；在内置案例里可追加虚拟测量并重新分析。
-
-## 安装与运行
-
-需要 Python 3.11 或更新版本。Windows 可双击 `start.bat`；macOS / Linux 可运行 `sh start.sh`。首次启动会创建独立环境并安装依赖。
-
-也可以在项目根目录手动安装：
-
-```bash
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS / Linux:
-# source .venv/bin/activate
-python -m pip install .
-python -m frostlens serve --open
-```
-
-浏览器访问 [http://127.0.0.1:8765](http://127.0.0.1:8765)。只监听本机；无需账号、云服务或 API 密钥。安装依赖需要联网，安装完成后的计算和界面不需要联网。
-
-不安装即可查看 `frostlens/web/index.html`：这是随版本附带的**只读计算快照**，可查看和导出；重新计算及导入功能需要启动本地服务。它使用真实程序产生的示例结果，不是界面占位数值。
-
-## 现在可以做什么
-
-| 功能 | 首版实现 |
+| 需要回答的问题 | 提供的结果 |
 |---|---|
-| 物理模型 | CoolProp 物性；CO₂ 低温级、NH₃ 高温级；等效 UA 复叠换热 |
-| 参数拟合 | 两级等熵效率、等效 UA、恒定辅助功率；有界加权最小二乘 |
-| 替代解释 | 多初值与固定参数重拟合搜索，返回实际计算的参数组合 |
-| 数据是否足够 | 噪声与参数尺度归一化的 Jacobian 奇异值及最弱方向 |
-| 下一次实验 | 用户限定工况域内的顺序正则化 D 最优推荐，附两解释预测分歧 |
-| 测量方式 | 总功率；或总功率 + 独立测得的低温级功率 |
-| 虚拟实验 | 窄工况、宽工况、模型失配三个有固定随机种子的合成案例 |
-| 可复算输出 | CSV 数据、JSON 分析结果、模型与依赖版本、数据指纹 |
-| 界面 | 中文、响应式、无前端框架和 CDN、本地文件导入与导出 |
+| 文件格式混杂，从哪里开始？ | 文件清单、表格与文本提取、无法直接读取格式的后续处理任务 |
+| 两个状态是否可以公平比较？ | 必要条件缺失、单位不兼容、非预期条件变化的提示 |
+| 指标实际改变了多少？ | 原始均值、样本数、带单位的差值，以及适用时的重采样区间 |
+| 差异是否有实际意义？ | 可调整的实际意义阈值，及结论随阈值变化的情况 |
+| 多个指标各有改善，怎么取舍？ | 同一研究内的多指标权衡，不强行合成总分 |
+| 结论来自哪里，如何复算？ | 数据指纹、来源位置、计算设置，以及 JSON/CSV/Markdown 输出 |
 
-## CSV 格式
+**不同学科共用比较流程，不共用一个“优劣总分”。** 材料强度、算法准确率与反应收率属于不同研究问题，应分别解释。
 
-```csv
-te_c,tc_c,tm_c,load_kw,power_kw,sigma_kw,low_power_kw,sigma_low_kw
--35,35,-10,8,4.5,0.08,1.8,0.04
-```
+## 直接使用
 
-这行只说明列格式，**不是验证数据**。请用界面中的“下载示例 CSV”或 `examples/narrow.csv` 开始。
-
-| 字段 | 含义 | 单位 |
-|---|---|---|
-| `te_c` | CO₂ 蒸发饱和温度 | °C |
-| `tc_c` | NH₃ 冷凝饱和温度 | °C |
-| `tm_c` | CO₂ 冷凝饱和温度，不是两侧温度平均值 | °C |
-| `load_kw` | 低温级制冷量 | kW |
-| `power_kw` | 总输入功率 | kW |
-| `sigma_kw` | 总功率测量的一倍标准不确定度，必须为正 | kW |
-| `low_power_kw` | 可选：独立测得的低温级功率 | kW |
-| `sigma_low_kw` | 使用分项模式时需要的低温级功率标准不确定度 | kW |
-
-当前上限 250 行。输入温度和负荷视为已知；其不确定度尚未纳入拟合。总功率若由分项相加而来，与低温级功率的误差可能相关，不能直接套用首版的独立误差假设。
-
-## 批量与可复现分析
+下载并解压上面的 skill 压缩包，需要 **Python 3.11+**。在解压后的 `compare-experiments` 文件夹中打开终端：
 
 ```bash
-python -m frostlens demo --case narrow --budget 3 --output local-reports/narrow.json
-python -m frostlens analyze examples/wide.csv --sensor-mode split --output local-reports/wide.json
-python -m unittest discover -s tests -v
+# 安装到 Codex
+python scripts/install.py --target codex
+# 或安装到 Claude Code
+python scripts/install.py --target claude
 ```
 
-数据与分析留在本机。`private-data/`、`local-reports/` 已加入忽略列表；准备公开自己的实验时，仍应检查实际提交内容。仓库只附带合成数据。
+Windows 中如果命令名是 `py`，可把 `python` 改为 `py -3`。不需要 API 密钥或额外 Python 库。若 skill 未出现在助手中，重新打开会话。
 
-## 它的新意在哪里
+然后给助手以下任务，把路径换成自己的文件夹：
 
-重点是将**竞争解释 → 可辨识性诊断 → 实验选择 → 追加证据**做成可以实际操作、复算和扩展的制冷研究工作流。虚拟案例让“拟合好 ≠ 参数被证实”成为可亲手观察的现象。
+```text
+使用 compare-experiments 分析 ./my-experiment。
+比较不同状态，说明哪些条件一致、哪些差异不能直接归因，
+生成交互报告并保留数据来源。请用适合初学者的语言解释结果。
+```
 
-Fisher 信息、D 最优设计、最小二乘、复叠循环和 CoolProp 都有前人工作。本项目不宣称发明这些算法，也不宣称全球首次实现。与 TESPy、Pyomo.DoE 等工具的关系、已知相关研究和可检验的研究问题见 [RESEARCH.md](docs/RESEARCH.md)。代码与界面为本项目新编写；依赖继续遵循各自许可。
+Codex CLI 可明确输入 `$compare-experiments`；Claude Code 可输入 `/compare-experiments`。具体目录、项目级安装与本机兼容方式见[安装说明](docs/INSTALL.md)。
 
-## 科学边界
+## 先看一个无需助手的示例
 
-- v0.1 是研究原型。例子是合成实验，尚未用真实台架验证诊断或实验收益。
-- 模型为稳态、饱和蒸气吸气、饱和液体出流、无压降的两个循环；过热/过冷均为零，UA 为集中等效参数，非完整换热器模型。
-- 奇异值是给定参数附近的局部诊断，不证明结构可辨识性或全局唯一性。
-- 没找到替代解释不代表只有一个解；显示的替代解释集合也不是置信区间。
-- 推荐依赖当前模型、噪声假设、参数边界和候选域。信息增益不是节能率或保证获得的实验收益。
-- 工况筛查只保证所实现模型内可计算，不代替设备的压力、电流、排温等运行限制。
+```bash
+python scripts/statelens.py demo --out demo-report --open
+```
 
-这些边界会出现在界面和报告里，以便结果离开软件后仍能被正确理解。
+生成 `report.html`，双击也能打开。示例涵盖计算机科学、材料科学、化学控制和热流工程，**全部为合成数据**。可以切换研究和候选状态、查看条件差异、调整实际意义阈值、导出报告。
 
-## 开放协作
+从完整仓库运行时，在脚本路径前加 `skills/compare-experiments/`。
 
-欢迎贡献匿名实测基准、相关测量误差支持、压力/排温约束、模型插件和界面翻译。先从复现一个案例开始；科研功能需附公式、单位、假设、验证数据来源与测试。见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+## 文件接入的实际能力
 
-**MIT 开源许可。** 可修改、分发与用于研究；请保留版权和许可说明。
+| 输入 | 当前处理方式 |
+|---|---|
+| CSV、TSV、JSON、JSONL、TXT、MD、LOG | 自带代码直接提取，助手根据字段和实验记录整理含义 |
+| XLSX | 自带代码读取工作表与缓存值；公式缺少缓存、日期等情况会提示核对 |
+| 图片、PDF、扫描件、音视频 | 自动识别并交给宿主助手可用的视觉、文档或转录工具；提取结果保留来源与核对状态 |
+| 时序、谱线、图像测量 | 按研究问题定义窗口、特征和独立实验单位；通用比较器接收经过核对的特征 |
+| HDF5、MAT、仪器二进制等 | 识别为需要专用读取器的输入，保留任务；可由助手使用已有工具转换 |
+
+这里的“自动”包括文件识别、读取路径选择和助手辅助整理，**不意味着一个脚本已能准确解码所有格式或理解所有实验**。工具缺失或实验含义不明时会说明具体缺口；不会编造测量值或把时间点数量当成独立重复次数。
+
+自带脚本不联网；宿主模型处理数据时仍遵循其自身的数据与权限设置。生成的报告包含提供给它的数据和来源信息，分享前应检查内容。
+
+## 有效比较的前提
+
+- 明确对照状态、指标单位、独立实验单位，以及有意改变的因素。
+- 配对实验按相同样本/批次 ID 对齐；配对不完整时不输出过强结论。
+- 未知采样方式采用描述性比较。重复时间点、像素、技术重复不会自动等同于独立样本。
+- 区间与阈值标签用于探索性判断，不等同于因果证明或经过多重比较校正的显著性检验。
+- 只有明确规定的条件能被检查；软件不能排除未记录的混杂因素。
+
+详细定义见 skill 内的[数据格式](skills/compare-experiments/references/schema.md)、[计算与解释](skills/compare-experiments/references/methods.md)和[混合输入指南](skills/compare-experiments/references/input-routes.md)。
+
+## 开发与复算
+
+```bash
+# 仅验证通用 skill，无第三方 Python 依赖
+python -m unittest discover -s tests -p "test_statelens_*.py" -v
+python tools/rebuild_statelens_demo.py
+python tools/package_statelens.py
+```
+
+第一版 FrostLens 的物理模型、数据格式和启动方式保持独立，见 [FROSTLENS.md](FROSTLENS.md)。通用 skill 无需安装 CoolProp。贡献新的学科案例时，请提供单位、实验单位、控制条件、原始来源和可验证的预期结果。
+
+代码采用 MIT 许可。原创工作是文件接入、比较条件检查、来源记录和交互报告的组合实现；重采样与多目标比较采用已有方法，不宣称理论首创。

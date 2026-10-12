@@ -1,14 +1,15 @@
 cff-version: 1.2.0
 message: "If this software helps your research, cite this version and the scientific methods and dependencies you used."
 type: software
-title: "FrostLens: an experiment detective for cascade refrigeration"
-version: 0.1.0
-date-released: '2026-10-09'
+title: "StateLens: evidence-grounded experimental state comparison"
+version: 0.2.0
+date-released: '2026-10-12'
+repository-code: "https://github.com/feifeing/FrostLens"
 authors:
   - name: FrostLens contributors
 license: MIT
-abstract: "A local workbench for competing parameter explanations, local identifiability diagnostics and sequential experiment selection in an NH3/CO2 cascade refrigeration model."
+abstract: "A portable agent skill for extracting mixed experimental evidence, checking declared comparison conditions, comparing states with uncertainty and producing traceable interactive reports. Includes the original FrostLens refrigeration workbench."
 keywords:
-  - refrigeration
-  - identifiability
-  - experimental design
+  - experimental comparison
+  - reproducibility
+  - agent skills
